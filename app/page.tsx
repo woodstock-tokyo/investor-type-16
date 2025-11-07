@@ -16,7 +16,7 @@ export default function Home() {
             あなたの投資家タイプは？
           </h1>
           <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-400">
-            16の質問で見つける、あなたに最適な投資スタイル
+            16のタイプで見つける、あなたに最適な投資スタイル
           </p>
           <p className="text-lg text-slate-500 dark:text-slate-500">
             リスク許容度、意思決定スタイル、時間軸、判断基準の4つの軸から、
