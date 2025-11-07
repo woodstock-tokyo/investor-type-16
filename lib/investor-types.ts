@@ -39,6 +39,7 @@ export interface InvestorTypeMeta {
   shortLabel: string;
   description: string; // 結果ページ用の長文ここに入れる
   idealStrategy?: string;
+  ctaMessage?: string; // CTA用のメッセージ
   bestMatches?: InvestorCode[];
   goodMatches?: InvestorCode[];
   challengeMatches?: InvestorCode[];
@@ -68,6 +69,7 @@ export const INVESTOR_TYPES: Record<InvestorCode, InvestorTypeMeta> = {
 成長株＋テクニカル分析＋損切りルール徹底。
 「素早く動き、素早く判断する」があなたのモットー`,
     idealStrategy: "成長株＋テクニカル分析＋損切りルール徹底",
+    ctaMessage: "リアルタイムの市場分析で、さらに投資判断を磨きませんか？woodstock.clubで最新の投資情報とコミュニティを体験しましょう。",
     bestMatches: ["RATV", "SALD"],
     goodMatches: ["SALV"],
     challengeMatches: ["RCLV"],
@@ -92,6 +94,7 @@ export const INVESTOR_TYPES: Record<InvestorCode, InvestorTypeMeta> = {
 テーマ株＋新興市場＋ポートフォリオ分散。
 「未来を信じて、早めに動く」があなたのモットー`,
     idealStrategy: "テーマ株＋新興市場＋ポートフォリオ分散",
+    ctaMessage: "次のトレンドを見逃さない。woodstock.clubで最新の投資テーマと成長企業の情報をいち早くチェックしましょう。",
     bestMatches: ["RATD"],
     goodMatches: ["RCLV"],
     challengeMatches: ["SCLV"],
@@ -116,6 +119,7 @@ export const INVESTOR_TYPES: Record<InvestorCode, InvestorTypeMeta> = {
 成長株＋長期保有＋定期的なリバランス。
 「データで選び、時間で育てる」があなたのモットー`,
     idealStrategy: "成長株＋長期保有＋定期的なリバランス",
+    ctaMessage: "長期投資を成功させるための最新の市場分析とポートフォリオ管理ツールを、woodstock.clubで体験してみませんか？",
     bestMatches: ["RCLD", "SALD"],
     goodMatches: ["RATD"],
     challengeMatches: ["RATV"],
@@ -140,6 +144,7 @@ export const INVESTOR_TYPES: Record<InvestorCode, InvestorTypeMeta> = {
 ESG投資＋成長期待株＋長期ホールド。
 「共感した企業と共に育つ」があなたのモットー`,
     idealStrategy: "ESG投資＋成長期待株＋長期ホールド",
+    ctaMessage: "理念と利益を両立させる投資を。woodstock.clubで社会的価値の高い企業の最新情報を手に入れましょう。",
     bestMatches: ["RCLD"],
     goodMatches: ["RATD", "SALD"],
     challengeMatches: ["RCLV"],
@@ -164,6 +169,7 @@ SNSやニュース、コミュニティから情報を集め、データで検�
 話題株＋テクニカル分析＋情報ソース多様化。
 「情報を集め、数字で決める」があなたのモットー`,
     idealStrategy: "話題株＋テクニカル分析＋情報ソース多様化",
+    ctaMessage: "情報が武器。woodstock.clubの投資家コミュニティで、信頼できる情報と分析を手に入れましょう。",
     bestMatches: ["RATD", "RCLD"],
     goodMatches: ["RATV"],
     challengeMatches: ["SCLV"],
@@ -188,6 +194,7 @@ SNSやコミュニティのトレンドを敏感に察知し、共感した銘�
 話題株＋短期売買＋損切り徹底。
 「波に乗り、タイミングで勝つ」があなたのモットー`,
     idealStrategy: "話題株＋短期売買＋損切り徹底",
+    ctaMessage: "トレンドの波に乗る。woodstock.clubで今話題の投資テーマとコミュニティの生の声をチェックしましょう。",
     bestMatches: ["RATD", "RATV"],
     goodMatches: ["RCLV"],
     challengeMatches: ["SALV"],
@@ -212,6 +219,7 @@ SNSやコミュニティのトレンドを敏感に察知し、共感した銘�
 優良株＋長期保有＋コミュニティ活用。
 「仲間と学び、データで決める」があなたのモットー`,
     idealStrategy: "優良株＋長期保有＋コミュニティ活用",
+    ctaMessage: "仲間と一緒に学び成長する。woodstock.clubの投資家コミュニティで、知識と経験を共有しましょう。",
     bestMatches: ["RALV", "RALD"],
     goodMatches: ["RCTV"],
     challengeMatches: ["SALV"],
@@ -236,6 +244,7 @@ SNSやコミュニティのトレンドを敏感に察知し、共感した銘�
 ESG投資＋テーマ株＋長期ホールド。
 「共感で選び、仲間と育てる」があなたのモットー`,
     idealStrategy: "ESG投資＋テーマ株＋長期ホールド",
+    ctaMessage: "同じ理念を持つ仲間と繋がる。woodstock.clubで社会的価値を大切にする投資家コミュニティに参加しませんか？",
     bestMatches: ["RATV"],
     goodMatches: ["SCLV"],
     challengeMatches: ["RATD"],
@@ -260,6 +269,7 @@ ESG投資＋テーマ株＋長期ホールド。
 配当株＋短期売買＋損切り徹底。
 「守りながら攻める」があなたのモットー`,
     idealStrategy: "配当株＋短期売買＋損切り徹底",
+    ctaMessage: "リスクを抑えながらも機動的に。woodstock.clubで安定性と収益性を両立する投資情報を入手しましょう。",
     bestMatches: ["SALD"],
     goodMatches: ["RATD"],
     challengeMatches: ["RCTV"],
@@ -284,6 +294,7 @@ ESG投資＋テーマ株＋長期ホールド。
 バランス型ファンド＋少額の個別株＋現金比率確保。
 「無理せず、楽しく続ける」があなたのモットー`,
     idealStrategy: "バランス型ファンド＋少額の個別株＋現金比率確保",
+    ctaMessage: "無理なく楽しく続ける投資を。woodstock.clubで初心者にも優しい投資コミュニティに参加しましょう。",
     bestMatches: ["SALD", "SALV"],
     goodMatches: ["RCLV"],
     challengeMatches: ["RATV"],
@@ -308,6 +319,7 @@ ESG投資＋テーマ株＋長期ホールド。
 インデックスファンド＋高配当株＋定期積立。
 「焦らず、淡々と積み上げる」があなたのモットー`,
     idealStrategy: "インデックスファンド＋高配当株＋定期積立",
+    ctaMessage: "堅実な資産形成をサポート。woodstock.clubで長期投資に役立つ情報とツールを活用しませんか？",
     bestMatches: ["SALV"],
     goodMatches: ["RATD", "RALD"],
     challengeMatches: ["RCTV"],
@@ -333,6 +345,7 @@ ESG投資＋テーマ株＋長期ホールド。
 高配当株＋インデックス＋現金比率20％。
 「減らさず増やす」があなたのモットー`,
     idealStrategy: "高配当株＋インデックス＋現金比率20％",
+    ctaMessage: "家族の未来を守る投資を。woodstock.clubで安心できる資産運用の情報を手に入れましょう。",
     bestMatches: ["SALD"],
     goodMatches: ["SCLD"],
     challengeMatches: ["RATV", "RCTV"],
@@ -357,6 +370,7 @@ ESG投資＋テーマ株＋長期ホールド。
 優良株＋短期売買＋情報収集徹底。
 「確認してから動く」があなたのモットー`,
     idealStrategy: "優良株＋短期売買＋情報収集徹底",
+    ctaMessage: "慎重な判断をサポート。woodstock.clubで多角的な投資情報と分析データを確認しませんか？",
     bestMatches: ["RATD"],
     goodMatches: ["SCLV"],
     challengeMatches: ["RATV"],
@@ -381,6 +395,7 @@ ESG投資＋テーマ株＋長期ホールド。
 話題株＋少額投資＋損切り徹底。
 「共感しながら、慎重に動く」があなたのモットー`,
     idealStrategy: "話題株＋少額投資＋損切り徹底",
+    ctaMessage: "共感できる投資を探す。woodstock.clubで話題の企業情報とコミュニティの意見をチェックしましょう。",
     bestMatches: ["RCLV"],
     goodMatches: ["RCTV"],
     challengeMatches: ["RATD"],
@@ -405,6 +420,7 @@ ESG投資＋テーマ株＋長期ホールド。
 インデックスファンド＋少額の個別株＋学習継続。
 「学びながら、着実に積み上げる」があなたのモットー`,
     idealStrategy: "インデックスファンド＋少額の個別株＋学習継続",
+    ctaMessage: "学びながら成長する投資を。woodstock.clubで初心者から中級者へステップアップしませんか？",
     bestMatches: ["SALD", "SALV"],
     goodMatches: ["SCLV"],
     challengeMatches: ["RCTV"],
@@ -429,6 +445,7 @@ ESG投資＋テーマ株＋長期ホールド。
 インデックスファンド＋ESG投資＋現金比率30％。
 「安心して、共感しながら続ける」があなたのモットー`,
     idealStrategy: "インデックスファンド＋ESG投資＋現金比率30％",
+    ctaMessage: "安心して続けられる投資を。woodstock.clubで同じ価値観を持つ仲間と一緒に、堅実な資産形成を始めましょう。",
     bestMatches: ["SALV", "RCLV"],
     goodMatches: ["SCLD"],
     challengeMatches: ["RATV", "RCTV"],
