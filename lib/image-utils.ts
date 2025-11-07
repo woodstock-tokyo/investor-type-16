@@ -13,6 +13,11 @@ const AVAILABLE_IMAGES: InvestorCode[] = [
   "SALD",
   "SATD",
   "SATV",
+  "SALV",
+  "SCTD",
+  "SCTV",
+  "SCLD",
+  "SCLV",
 ];
 
 /**

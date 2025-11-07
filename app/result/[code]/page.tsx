@@ -23,126 +23,170 @@ export default async function ResultPage({ params }: PageProps) {
 
   const imageUrl = getTypeImageUrl(investorType.code);
 
-  const renderTypeList = (codes?: InvestorCode[]) => {
-    if (!codes || codes.length === 0) return null;
-    return (
-      <div className="flex flex-wrap gap-2">
-        {codes.map((c) => (
-          <Link key={c} href={`/result/${c}`}>
-            <span className="inline-block px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-sm hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
-              {INVESTOR_TYPES[c]?.name || c}
-              <span className="ml-1.5 text-xs opacity-70">({c})</span>
-            </span>
-          </Link>
-        ))}
-      </div>
-    );
-  };
+  // description を段落ごとに分割（** で始まる行を見出しとして扱う）
+  const descriptionLines = investorType.description.split("\n").filter((line) => line.trim());
 
   return (
     <div className="min-h-screen bg-linear-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-3xl mx-auto space-y-8">
-          {/* Result Header */}
-          <div className="text-center space-y-4">
-            <div className="inline-block px-4 py-2 bg-primary/10 rounded-full mb-2">
-              <span className="text-sm font-semibold text-primary">
+          {/* Result Header with Image */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            {/* Text Content */}
+            <div className="text-center lg:text-left space-y-4 order-2 lg:order-1">
+              <div className="text-6xl md:text-7xl font-bold text-slate-900 dark:text-slate-50 mb-4">
                 {investorType.code}
-              </span>
+              </div>
+              <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-slate-50">
+                {investorType.name}©
+              </h1>
+              <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400">
+                {investorType.shortLabel}
+              </p>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-50">
-              {investorType.name}
-            </h1>
-            <p className="text-xl text-slate-600 dark:text-slate-400">
-              {investorType.shortLabel}
-            </p>
-          </div>
 
-          {/* Type Image */}
-          <div className="flex justify-center">
-            {imageUrl ? (
-              <div className="relative w-full max-w-md aspect-square rounded-lg overflow-hidden shadow-lg">
-                <Image
-                  src={imageUrl}
-                  alt={`${investorType.name}のイメージ`}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
-            ) : (
-              <div className="w-full max-w-md aspect-square rounded-lg bg-slate-200 dark:bg-slate-800 flex items-center justify-center">
-                <div className="text-center space-y-2">
-                  <div className="text-6xl">📊</div>
-                  <p className="text-slate-500 dark:text-slate-400">
-                    {investorType.code}
-                  </p>
+            {/* Type Image */}
+            <div className="flex justify-center order-1 lg:order-2">
+              {imageUrl ? (
+                <div className="relative w-full max-w-sm aspect-square rounded-lg overflow-hidden">
+                  <Image
+                    src={imageUrl}
+                    alt={`${investorType.name}のイメージ`}
+                    fill
+                    className="object-cover"
+                    priority
+                  />
                 </div>
-              </div>
-            )}
+              ) : (
+                <div className="w-full max-w-sm aspect-square rounded-lg bg-slate-200 dark:bg-slate-800 flex items-center justify-center">
+                  <div className="text-center space-y-2">
+                    <div className="text-6xl">📊</div>
+                    <p className="text-slate-500 dark:text-slate-400">
+                      {investorType.code}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Description */}
-          {investorType.description && (
-            <Card>
-              <CardHeader>
-                <CardTitle>あなたのタイプについて</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
-                  {investorType.description || "このタイプの詳細な説明はまだ準備中です。"}
-                </p>
-              </CardContent>
-            </Card>
-          )}
+          <Card>
+            <CardContent className="pt-8 pb-8">
+              <div className="prose prose-slate dark:prose-invert max-w-none">
+                {descriptionLines.map((line, index) => {
+                  // **で囲まれた見出しを処理
+                  if (line.startsWith("**") && line.endsWith("**")) {
+                    const heading = line.replace(/\*\*/g, "");
+                    return (
+                      <h3
+                        key={index}
+                        className="text-xl font-bold text-slate-900 dark:text-slate-50 mt-6 mb-3 first:mt-0"
+                      >
+                        {heading}
+                      </h3>
+                    );
+                  }
+                  return (
+                    <p
+                      key={index}
+                      className="text-slate-700 dark:text-slate-300 mb-4 leading-relaxed whitespace-pre-line"
+                    >
+                      {line}
+                    </p>
+                  );
+                })}
+              </div>
+            </CardContent>
+          </Card>
 
-          {/* Ideal Strategy */}
-          {investorType.idealStrategy && (
-            <Card>
-              <CardHeader>
-                <CardTitle>理想的な投資戦略</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
-                  {investorType.idealStrategy || "理想的な戦略はまだ準備中です。"}
-                </p>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Compatibility */}
+          {/* Compatibility Section */}
           {(investorType.bestMatches || investorType.goodMatches || investorType.challengeMatches) && (
             <Card>
-              <CardHeader>
-                <CardTitle>相性</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                {investorType.bestMatches && investorType.bestMatches.length > 0 && (
-                  <div>
-                    <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-3">
-                      ベストマッチ 💚
-                    </h3>
-                    {renderTypeList(investorType.bestMatches)}
-                  </div>
-                )}
+              <CardContent className="pt-6 pb-6">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-slate-50 mb-4">
+                  🤝 他のタイプとの相性
+                </h3>
 
-                {investorType.goodMatches && investorType.goodMatches.length > 0 && (
-                  <div>
-                    <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-3">
-                      相性が良い 👍
-                    </h3>
-                    {renderTypeList(investorType.goodMatches)}
-                  </div>
-                )}
+                <div className="space-y-4">
+                  {investorType.bestMatches && investorType.bestMatches.length > 0 && (
+                    <div>
+                      <h4 className="text-sm font-semibold text-green-700 dark:text-green-400 mb-2">
+                        ベストマッチ
+                      </h4>
+                      <div className="flex flex-wrap gap-2">
+                        {investorType.bestMatches.map((code) => (
+                          <Link key={code} href={`/result/${code}`}>
+                            <Button variant="outline" size="sm">
+                              <span className="font-mono mr-1.5">{code}</span>
+                              <span>{INVESTOR_TYPES[code]?.name}©</span>
+                            </Button>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
-                {investorType.challengeMatches && investorType.challengeMatches.length > 0 && (
-                  <div>
-                    <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-3">
-                      チャレンジング 🤔
-                    </h3>
-                    {renderTypeList(investorType.challengeMatches)}
-                  </div>
-                )}
+                  {investorType.goodMatches && investorType.goodMatches.length > 0 && (
+                    <div>
+                      <h4 className="text-sm font-semibold text-blue-700 dark:text-blue-400 mb-2">
+                        相性良好
+                      </h4>
+                      <div className="flex flex-wrap gap-2">
+                        {investorType.goodMatches.map((code) => (
+                          <Link key={code} href={`/result/${code}`}>
+                            <Button variant="outline" size="sm">
+                              <span className="font-mono mr-1.5">{code}</span>
+                              <span>{INVESTOR_TYPES[code]?.name}©</span>
+                            </Button>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {investorType.challengeMatches && investorType.challengeMatches.length > 0 && (
+                    <div>
+                      <h4 className="text-sm font-semibold text-orange-700 dark:text-orange-400 mb-2">
+                        チャレンジ相性
+                      </h4>
+                      <div className="flex flex-wrap gap-2">
+                        {investorType.challengeMatches.map((code) => (
+                          <Link key={code} href={`/result/${code}`}>
+                            <Button variant="outline" size="sm">
+                              <span className="font-mono mr-1.5">{code}</span>
+                              <span>{INVESTOR_TYPES[code]?.name}©</span>
+                            </Button>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* CTA Section */}
+          {investorType.ctaMessage && (
+            <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 border-blue-200 dark:border-blue-800">
+              <CardContent className="pt-8 pb-8 text-center">
+                <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mb-4">
+                  次のステップへ
+                </h3>
+                <p className="text-slate-700 dark:text-slate-300 mb-6 max-w-2xl mx-auto">
+                  {investorType.ctaMessage}
+                </p>
+                <a
+                  href="https://woodstock.club"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block"
+                >
+                  <Button size="lg" className="text-lg px-8 py-6">
+                    woodstock.clubアプリをダウンロード
+                  </Button>
+                </a>
               </CardContent>
             </Card>
           )}

@@ -30,9 +30,9 @@ export default function TypesListPage() {
             const imageUrl = getTypeImageUrl(type.code);
             return (
               <Link key={type.code} href={`/types/${type.code}`}>
-                <Card className="h-full transition-all hover:shadow-lg hover:scale-105 cursor-pointer overflow-hidden">
+                <Card className="h-full transition-all hover:shadow-lg hover:scale-105 cursor-pointer overflow-hidden py-0 gap-0">
                   <CardContent className="p-0">
-                    <div className="space-y-3">
+                    <div>
                       {/* Image or Placeholder */}
                       <div className="relative w-full aspect-square">
                         {imageUrl ? (
@@ -54,16 +54,21 @@ export default function TypesListPage() {
                         )}
                       </div>
                       {/* Text Content */}
-                      <div className="text-center px-4 pb-4">
-                        <div className="text-lg font-bold text-slate-900 dark:text-slate-50 mb-1">
-                          {type.code}
+                      <div className="text-center px-4 py-3 space-y-3">
+                        <div>
+                          <div className="text-lg font-bold text-slate-900 dark:text-slate-50 mb-1">
+                            {type.code}
+                          </div>
+                          <h3 className="text-base font-semibold text-slate-900 dark:text-slate-50 mb-1">
+                            {type.name}©
+                          </h3>
+                          <p className="text-xs text-slate-600 dark:text-slate-400">
+                            {type.shortLabel}
+                          </p>
                         </div>
-                        <h3 className="text-base font-semibold text-slate-900 dark:text-slate-50 mb-1">
-                          {type.name}
-                        </h3>
-                        <p className="text-xs text-slate-600 dark:text-slate-400">
-                          {type.shortLabel}
-                        </p>
+                        <Button size="sm" className="w-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border-0 text-slate-900 dark:text-slate-50">
+                          詳しくみる
+                        </Button>
                       </div>
                     </div>
                   </CardContent>

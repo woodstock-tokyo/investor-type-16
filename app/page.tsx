@@ -1,11 +1,15 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { TypesCarousel } from "@/components/types-carousel";
 
 export default function Home() {
   return (
     <div className="bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
-      <div className="container mx-auto px-4 py-16 flex flex-col items-center justify-center">
+      {/* Types Carousel */}
+      <TypesCarousel />
+
+      <div className="container mx-auto px-4 pb-16 flex flex-col items-center justify-center">
         {/* Hero Section */}
         <div className="text-center space-y-6 mb-12 max-w-3xl">
           <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50">

@@ -35,41 +35,44 @@ export default async function TypeDetailPage({ params }: TypeDetailPageProps) {
   return (
     <div className="bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 py-16">
       <div className="container mx-auto px-4 max-w-4xl">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="text-3xl font-bold text-slate-500 dark:text-slate-400 mb-2">
-            {typeData.code}
+        {/* Header with Image */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 items-center">
+          {/* Text Content */}
+          <div className="text-center lg:text-left space-y-4 order-2 lg:order-1">
+            <div className="text-6xl md:text-7xl font-bold text-slate-900 dark:text-slate-50 mb-4">
+              {typeData.code}
+            </div>
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+              {typeData.name}©
+            </h1>
+            <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400">
+              {typeData.shortLabel}
+            </p>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 dark:text-slate-50 mb-4">
-            {typeData.name}
-          </h1>
-          <p className="text-xl text-slate-600 dark:text-slate-400">
-            {typeData.shortLabel}
-          </p>
-        </div>
 
-        {/* Type Image */}
-        <div className="flex justify-center mb-8">
-          {imageUrl ? (
-            <div className="relative w-full max-w-md aspect-square rounded-lg overflow-hidden shadow-lg">
-              <Image
-                src={imageUrl}
-                alt={`${typeData.name}のイメージ`}
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
-          ) : (
-            <div className="w-full max-w-md aspect-square rounded-lg bg-slate-200 dark:bg-slate-800 flex items-center justify-center">
-              <div className="text-center space-y-2">
-                <div className="text-6xl">📊</div>
-                <p className="text-slate-500 dark:text-slate-400">
-                  {typeData.code}
-                </p>
+          {/* Type Image */}
+          <div className="flex justify-center order-1 lg:order-2">
+            {imageUrl ? (
+              <div className="relative w-full max-w-sm aspect-square rounded-lg overflow-hidden">
+                <Image
+                  src={imageUrl}
+                  alt={`${typeData.name}のイメージ`}
+                  fill
+                  className="object-cover"
+                  priority
+                />
               </div>
-            </div>
-          )}
+            ) : (
+              <div className="w-full max-w-sm aspect-square rounded-lg bg-slate-200 dark:bg-slate-800 flex items-center justify-center">
+                <div className="text-center space-y-2">
+                  <div className="text-6xl">📊</div>
+                  <p className="text-slate-500 dark:text-slate-400">
+                    {typeData.code}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Description */}
@@ -102,20 +105,6 @@ export default async function TypeDetailPage({ params }: TypeDetailPageProps) {
           </CardContent>
         </Card>
 
-        {/* Ideal Strategy */}
-        {typeData.idealStrategy && (
-          <Card className="mb-8">
-            <CardContent className="pt-6 pb-6">
-              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-50 mb-3">
-                💡 理想の投資戦略
-              </h3>
-              <p className="text-slate-700 dark:text-slate-300">
-                {typeData.idealStrategy}
-              </p>
-            </CardContent>
-          </Card>
-        )}
-
         {/* Compatibility Section */}
         {(typeData.bestMatches || typeData.goodMatches || typeData.challengeMatches) && (
           <Card className="mb-8">
@@ -133,8 +122,9 @@ export default async function TypeDetailPage({ params }: TypeDetailPageProps) {
                     <div className="flex flex-wrap gap-2">
                       {typeData.bestMatches.map((code) => (
                         <Link key={code} href={`/types/${code}`}>
-                          <Button variant="outline" size="sm" className="font-mono">
-                            {code}
+                          <Button variant="outline" size="sm">
+                            <span className="font-mono mr-1.5">{code}</span>
+                            <span>{INVESTOR_TYPES[code]?.name}©</span>
                           </Button>
                         </Link>
                       ))}
@@ -150,8 +140,9 @@ export default async function TypeDetailPage({ params }: TypeDetailPageProps) {
                     <div className="flex flex-wrap gap-2">
                       {typeData.goodMatches.map((code) => (
                         <Link key={code} href={`/types/${code}`}>
-                          <Button variant="outline" size="sm" className="font-mono">
-                            {code}
+                          <Button variant="outline" size="sm">
+                            <span className="font-mono mr-1.5">{code}</span>
+                            <span>{INVESTOR_TYPES[code]?.name}©</span>
                           </Button>
                         </Link>
                       ))}
@@ -167,8 +158,9 @@ export default async function TypeDetailPage({ params }: TypeDetailPageProps) {
                     <div className="flex flex-wrap gap-2">
                       {typeData.challengeMatches.map((code) => (
                         <Link key={code} href={`/types/${code}`}>
-                          <Button variant="outline" size="sm" className="font-mono">
-                            {code}
+                          <Button variant="outline" size="sm">
+                            <span className="font-mono mr-1.5">{code}</span>
+                            <span>{INVESTOR_TYPES[code]?.name}©</span>
                           </Button>
                         </Link>
                       ))}
