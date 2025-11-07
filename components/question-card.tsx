@@ -19,11 +19,11 @@ interface QuestionCardProps {
 }
 
 const ANSWER_OPTIONS = [
-  { value: 1, label: "全くそう思わない" },
-  { value: 2, label: "そう思わない" },
-  { value: 3, label: "どちらでもない" },
-  { value: 4, label: "そう思う" },
   { value: 5, label: "とてもそう思う" },
+  { value: 4, label: "そう思う" },
+  { value: 3, label: "どちらでもない" },
+  { value: 2, label: "そう思わない" },
+  { value: 1, label: "全くそう思わない" },
 ] as const;
 
 export function QuestionCard({
