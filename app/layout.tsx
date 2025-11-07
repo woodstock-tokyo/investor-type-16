@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://investor-type-16.netlify.app'),
   title: "インベスタータイプ16 - あなたの投資スタイル診断",
   description: "4つの軸から16タイプに分類。あなたに最適な投資戦略を見つけましょう。",
   openGraph: {
