@@ -48,7 +48,7 @@ export default async function ResultPage({ params }: PageProps) {
             {/* Type Image */}
             <div className="flex justify-center order-1 lg:order-2">
               {imageUrl ? (
-                <div className="relative w-full max-w-sm aspect-square rounded-lg overflow-hidden">
+                <div className="relative w-full max-w-xs aspect-square rounded-lg overflow-hidden">
                   <Image
                     src={imageUrl}
                     alt={`${investorType.name}のイメージ`}
@@ -58,7 +58,7 @@ export default async function ResultPage({ params }: PageProps) {
                   />
                 </div>
               ) : (
-                <div className="w-full max-w-sm aspect-square rounded-lg bg-slate-200 dark:bg-slate-800 flex items-center justify-center">
+                <div className="w-full max-w-xs aspect-square rounded-lg bg-slate-200 dark:bg-slate-800 flex items-center justify-center">
                   <div className="text-center space-y-2">
                     <div className="text-6xl">📊</div>
                     <p className="text-slate-500 dark:text-slate-400">
@@ -116,7 +116,7 @@ export default async function ResultPage({ params }: PageProps) {
                       </h4>
                       <div className="flex flex-wrap gap-2">
                         {investorType.bestMatches.map((code) => (
-                          <Link key={code} href={`/result/${code}`}>
+                          <Link key={code} href={`/types/${code}`}>
                             <Button variant="outline" size="sm">
                               <span className="font-mono mr-1.5">{code}</span>
                               <span>{INVESTOR_TYPES[code]?.name}©</span>
@@ -134,7 +134,7 @@ export default async function ResultPage({ params }: PageProps) {
                       </h4>
                       <div className="flex flex-wrap gap-2">
                         {investorType.goodMatches.map((code) => (
-                          <Link key={code} href={`/result/${code}`}>
+                          <Link key={code} href={`/types/${code}`}>
                             <Button variant="outline" size="sm">
                               <span className="font-mono mr-1.5">{code}</span>
                               <span>{INVESTOR_TYPES[code]?.name}©</span>
@@ -152,7 +152,7 @@ export default async function ResultPage({ params }: PageProps) {
                       </h4>
                       <div className="flex flex-wrap gap-2">
                         {investorType.challengeMatches.map((code) => (
-                          <Link key={code} href={`/result/${code}`}>
+                          <Link key={code} href={`/types/${code}`}>
                             <Button variant="outline" size="sm">
                               <span className="font-mono mr-1.5">{code}</span>
                               <span>{INVESTOR_TYPES[code]?.name}©</span>
@@ -170,20 +170,20 @@ export default async function ResultPage({ params }: PageProps) {
           {/* CTA Section */}
           {investorType.ctaMessage && (
             <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 border-blue-200 dark:border-blue-800">
-              <CardContent className="pt-8 pb-8 text-center">
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mb-4">
+              <CardContent className="pt-6 pb-6 text-center">
+                <h3 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-slate-50 mb-3">
                   次のステップへ
                 </h3>
-                <p className="text-slate-700 dark:text-slate-300 mb-6 max-w-2xl mx-auto">
+                <p className="text-sm md:text-base text-slate-700 dark:text-slate-300 mb-4 max-w-2xl mx-auto px-4">
                   {investorType.ctaMessage}
                 </p>
                 <a
-                  href="https://woodstock.club"
+                  href="https://woodstock.go.link?adj_t=1g32x80c"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block"
+                  className="inline-block w-full max-w-md px-4"
                 >
-                  <Button size="lg" className="text-lg px-8 py-6">
+                  <Button size="lg" className="text-sm md:text-base px-4 md:px-6 py-4 md:py-5 w-full">
                     woodstock.clubアプリをダウンロード
                   </Button>
                 </a>

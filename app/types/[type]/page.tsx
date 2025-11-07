@@ -53,7 +53,7 @@ export default async function TypeDetailPage({ params }: TypeDetailPageProps) {
           {/* Type Image */}
           <div className="flex justify-center order-1 lg:order-2">
             {imageUrl ? (
-              <div className="relative w-full max-w-sm aspect-square rounded-lg overflow-hidden">
+              <div className="relative w-full max-w-xs aspect-square rounded-lg overflow-hidden">
                 <Image
                   src={imageUrl}
                   alt={`${typeData.name}のイメージ`}
@@ -63,7 +63,7 @@ export default async function TypeDetailPage({ params }: TypeDetailPageProps) {
                 />
               </div>
             ) : (
-              <div className="w-full max-w-sm aspect-square rounded-lg bg-slate-200 dark:bg-slate-800 flex items-center justify-center">
+              <div className="w-full max-w-xs aspect-square rounded-lg bg-slate-200 dark:bg-slate-800 flex items-center justify-center">
                 <div className="text-center space-y-2">
                   <div className="text-6xl">📊</div>
                   <p className="text-slate-500 dark:text-slate-400">
@@ -173,14 +173,14 @@ export default async function TypeDetailPage({ params }: TypeDetailPageProps) {
         )}
 
         {/* Navigation Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mt-12">
-          <Link href="/types">
-            <Button variant="outline" size="lg">
+        <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mt-12">
+          <Link href="/types" className="w-full sm:w-auto flex justify-center">
+            <Button variant="outline" size="lg" className="w-full sm:w-auto">
               タイプ一覧に戻る
             </Button>
           </Link>
-          <Link href="/test?q=0&reset=true">
-            <Button size="lg">診断を始める</Button>
+          <Link href="/test?q=0&reset=true" className="w-full sm:w-auto flex justify-center">
+            <Button size="lg" className="w-full sm:w-auto">診断を始める</Button>
           </Link>
         </div>
       </div>

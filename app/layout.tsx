@@ -17,6 +17,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "インベスタータイプ16 - あなたの投資スタイル診断",
   description: "4つの軸から16タイプに分類。あなたに最適な投資戦略を見つけましょう。",
+  openGraph: {
+    type: "website",
+    title: "インベスタータイプ16 - あなたの投資スタイル診断",
+    description: "4つの軸から16タイプに分類。あなたに最適な投資戦略を見つけましょう。",
+  },
 };
 
 export default function RootLayout({

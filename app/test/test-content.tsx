@@ -96,11 +96,11 @@ export function TestContent() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-linear-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex flex-col">
+      <div className="container mx-auto px-4 py-4 flex-1 flex flex-col">
         {/* Header with Progress */}
-        <div className="max-w-2xl mx-auto mb-8">
-          <div className="flex items-center gap-4 mb-4">
+        <div className="max-w-2xl mx-auto mb-4 w-full">
+          <div className="flex items-center gap-2 mb-2">
             <Button
               variant="ghost"
               size="icon"
@@ -109,17 +109,17 @@ export function TestContent() {
             >
               <ChevronLeft className="h-5 w-5" />
             </Button>
-            <div className="flex-1">
-              <Progress value={progress} className="h-2" />
+            <div className="flex-1 flex items-center gap-2">
+              <Progress value={progress} className="h-2 flex-1" />
+              <span className="text-xs text-slate-600 dark:text-slate-400 whitespace-nowrap">
+                {Math.round(progress)}%
+              </span>
             </div>
           </div>
-          <p className="text-center text-sm text-slate-600 dark:text-slate-400">
-            {Math.round(progress)}%
-          </p>
         </div>
 
         {/* Question Card */}
-        <div className="flex flex-col items-center gap-6 mb-8">
+        <div className="flex flex-col items-center gap-4 mb-4 flex-1">
           <QuestionCard
             key={currentQuestion.id}
             questionNumber={currentQuestionIndex + 1}
@@ -127,19 +127,10 @@ export function TestContent() {
             questionText={currentQuestion.text}
             value={currentAnswer}
             onValueChange={handleAnswerChange}
+            onNext={handleNext}
+            canProceed={canProceed}
+            isLastQuestion={currentQuestionIndex === totalQuestions - 1}
           />
-        </div>
-
-        {/* Navigation */}
-        <div className="flex justify-center">
-          <Button
-            size="lg"
-            onClick={handleNext}
-            disabled={!canProceed}
-            className="min-w-[200px]"
-          >
-            {currentQuestionIndex < totalQuestions - 1 ? "次へ" : "結果を見る"}
-          </Button>
         </div>
       </div>
     </div>

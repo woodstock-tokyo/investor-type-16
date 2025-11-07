@@ -34,13 +34,13 @@ export default function TypesListPage() {
                   <CardContent className="p-0">
                     <div>
                       {/* Image or Placeholder */}
-                      <div className="relative w-full aspect-square">
+                      <div className="relative w-full aspect-[4/3] bg-white dark:bg-slate-800">
                         {imageUrl ? (
                           <Image
                             src={imageUrl}
                             alt={`${type.name}のイメージ`}
                             fill
-                            className="object-cover"
+                            className="object-contain p-4"
                           />
                         ) : (
                           <div className="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center">

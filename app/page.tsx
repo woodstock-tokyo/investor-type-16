@@ -12,7 +12,7 @@ export default function Home() {
       <div className="container mx-auto px-4 pb-16 flex flex-col items-center justify-center">
         {/* Hero Section */}
         <div className="text-center space-y-6 mb-12 max-w-3xl">
-          <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+          <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
             あなたの投資家タイプは？
           </h1>
           <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-400">

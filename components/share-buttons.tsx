@@ -52,8 +52,8 @@ export function ShareButtons({ investorCode, investorName }: ShareButtonsProps) 
   return (
     <div className="flex flex-col sm:flex-row gap-3 w-full max-w-md">
       <Button
-        variant="outline"
-        className="flex-1"
+        variant={copied ? "default" : "outline"}
+        className="flex-1 transition-all"
         onClick={handleCopyUrl}
       >
         {copied ? (

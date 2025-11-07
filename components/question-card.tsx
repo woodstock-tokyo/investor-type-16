@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import type { AnswerValue } from "@/lib/investor-types";
 import { cn } from "@/lib/utils";
 
@@ -12,6 +13,9 @@ interface QuestionCardProps {
   questionText: string;
   value: AnswerValue | undefined;
   onValueChange: (value: AnswerValue) => void;
+  onNext?: () => void;
+  canProceed?: boolean;
+  isLastQuestion?: boolean;
 }
 
 const ANSWER_OPTIONS = [
@@ -28,18 +32,21 @@ export function QuestionCard({
   questionText,
   value,
   onValueChange,
+  onNext,
+  canProceed,
+  isLastQuestion,
 }: QuestionCardProps) {
   return (
     <Card className="w-full max-w-2xl">
-      <CardHeader>
-        <div className="text-sm text-slate-500 dark:text-slate-400 mb-2">
+      <CardHeader className="pb-3">
+        <div className="text-xs text-slate-500 dark:text-slate-400 mb-1">
           質問 {questionNumber} / {totalQuestions}
         </div>
-        <CardTitle className="text-xl md:text-2xl leading-relaxed">
+        <CardTitle className="text-lg md:text-xl leading-relaxed">
           {questionText}
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pb-3">
         <RadioGroup
           value={value?.toString()}
           onValueChange={(v) => onValueChange(parseInt(v) as AnswerValue)}
@@ -52,7 +59,7 @@ export function QuestionCard({
                 key={option.value}
                 htmlFor={`q${questionNumber}-option-${option.value}`}
                 className={cn(
-                  "flex flex-col items-center justify-center p-4 rounded-lg border-2 transition-all cursor-pointer",
+                  "flex flex-col items-center justify-center p-4 md:p-3 rounded-lg border-2 transition-all cursor-pointer min-h-[56px]",
                   isSelected
                     ? "border-primary bg-primary/10 dark:bg-primary/20"
                     : "border-slate-200 dark:border-slate-800 hover:border-primary/50 hover:bg-slate-50 dark:hover:bg-slate-900"
@@ -65,7 +72,7 @@ export function QuestionCard({
                 />
                 <div
                   className={cn(
-                    "text-sm text-center font-medium transition-colors",
+                    "text-xs md:text-sm text-center font-medium transition-colors",
                     isSelected
                       ? "text-primary font-semibold"
                       : "text-slate-700 dark:text-slate-300"
@@ -77,6 +84,18 @@ export function QuestionCard({
             );
           })}
         </RadioGroup>
+        {onNext && (
+          <div className="mt-8 flex justify-center">
+            <Button
+              size="lg"
+              onClick={onNext}
+              disabled={!canProceed}
+              className="min-w-[200px]"
+            >
+              {isLastQuestion ? "結果を見る" : "次へ"}
+            </Button>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

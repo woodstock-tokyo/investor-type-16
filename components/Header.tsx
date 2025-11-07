@@ -7,7 +7,7 @@ export function Header() {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo/Title */}
         <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
-          <span className="text-xl font-bold text-slate-900 dark:text-slate-50">
+          <span className="text-sm sm:text-base md:text-xl font-bold text-slate-900 dark:text-slate-50 whitespace-nowrap">
             インベスタータイプ16
           </span>
         </Link>
