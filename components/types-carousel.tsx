@@ -28,42 +28,43 @@ export function TypesCarousel() {
   };
 
   return (
-    <div className="relative w-full overflow-hidden py-8 pb-12 mb-6">
-      {/* Gradient overlays */}
-      <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-slate-50 to-transparent dark:from-slate-950 z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-slate-50 to-transparent dark:from-slate-950 z-10 pointer-events-none" />
+    <div className="relative w-full overflow-x-auto md:overflow-x-hidden py-8 mb-6 scrollbar-hide">
+      {/* Gradient overlays - hidden on mobile */}
+      <div className="hidden md:block absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-slate-50 to-transparent dark:from-slate-950 z-10 pointer-events-none" />
+      <div className="hidden md:block absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-slate-50 to-transparent dark:from-slate-950 z-10 pointer-events-none" />
 
-      {/* Scrolling container */}
-      <div
-        ref={scrollContainerRef}
-        className={`flex gap-4 md:gap-6 ${isPaused ? '' : 'animate-scroll'}`}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
+      {/* Scrolling container wrapper */}
+      <div className="pb-4 md:pb-8 scrollbar-hide">
+        <div
+          ref={scrollContainerRef}
+          className={`flex gap-4 md:gap-6 ${isPaused ? '' : 'animate-scroll'}`}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
         {/* First set of cards */}
         {types.map((type) => {
           const imageUrl = getTypeImageUrl(type.code);
           return (
             <div
               key={`${type.code}-1`}
-              className="flex-shrink-0 w-32 md:w-48 group cursor-default"
+              className="flex-shrink-0 w-24 md:w-48 group cursor-default"
             >
               <div className="bg-white dark:bg-slate-900 rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-105">
                 {/* Image */}
-                <div className="relative w-full aspect-square">
+                <div className="relative w-full h-24 md:h-48 md:aspect-square">
                   {imageUrl ? (
                     <Image
                       src={imageUrl}
                       alt={`${type.name}のイメージ`}
                       fill
-                      className="object-cover"
+                      className="object-contain"
                     />
                   ) : (
                     <div className="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center">
                       <div className="text-center">
-                        <div className="text-3xl mb-1">📊</div>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">
+                        <div className="text-2xl md:text-3xl mb-1">📊</div>
+                        <p className="text-[10px] md:text-xs text-slate-500 dark:text-slate-400">
                           {type.code}
                         </p>
                       </div>
@@ -71,11 +72,11 @@ export function TypesCarousel() {
                   )}
                 </div>
                 {/* Text content */}
-                <div className="p-3 text-center">
-                  <div className="text-sm font-bold text-slate-900 dark:text-slate-50 mb-1">
+                <div className="p-2 md:p-3 text-center">
+                  <div className="text-[11px] md:text-sm font-bold text-slate-900 dark:text-slate-50 mb-0.5 md:mb-1">
                     {type.code}
                   </div>
-                  <div className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  <div className="text-[10px] md:text-xs font-semibold text-slate-700 dark:text-slate-300 line-clamp-2 md:line-clamp-none">
                     {type.name}©
                   </div>
                 </div>
@@ -90,23 +91,23 @@ export function TypesCarousel() {
           return (
             <div
               key={`${type.code}-2`}
-              className="flex-shrink-0 w-32 md:w-48 group cursor-default"
+              className="flex-shrink-0 w-24 md:w-48 group cursor-default"
             >
               <div className="bg-white dark:bg-slate-900 rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-105">
                 {/* Image */}
-                <div className="relative w-full aspect-square">
+                <div className="relative w-full h-24 md:h-48 md:aspect-square">
                   {imageUrl ? (
                     <Image
                       src={imageUrl}
                       alt={`${type.name}のイメージ`}
                       fill
-                      className="object-cover"
+                      className="object-contain"
                     />
                   ) : (
                     <div className="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center">
                       <div className="text-center">
-                        <div className="text-3xl mb-1">📊</div>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">
+                        <div className="text-2xl md:text-3xl mb-1">📊</div>
+                        <p className="text-[10px] md:text-xs text-slate-500 dark:text-slate-400">
                           {type.code}
                         </p>
                       </div>
@@ -114,11 +115,11 @@ export function TypesCarousel() {
                   )}
                 </div>
                 {/* Text content */}
-                <div className="p-3 text-center">
-                  <div className="text-sm font-bold text-slate-900 dark:text-slate-50 mb-1">
+                <div className="p-2 md:p-3 text-center">
+                  <div className="text-[11px] md:text-sm font-bold text-slate-900 dark:text-slate-50 mb-0.5 md:mb-1">
                     {type.code}
                   </div>
-                  <div className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  <div className="text-[10px] md:text-xs font-semibold text-slate-700 dark:text-slate-300 line-clamp-2 md:line-clamp-none">
                     {type.name}©
                   </div>
                 </div>
@@ -126,6 +127,7 @@ export function TypesCarousel() {
             </div>
           );
         })}
+        </div>
       </div>
 
       {/* CSS Animation */}
@@ -140,7 +142,13 @@ export function TypesCarousel() {
         }
 
         .animate-scroll {
-          animation: scroll 20s linear infinite;
+          animation: scroll 15s linear infinite;
+        }
+
+        @media (min-width: 768px) {
+          .animate-scroll {
+            animation: scroll 40s linear infinite;
+          }
         }
 
         .scrollbar-hide {

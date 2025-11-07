@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -8,10 +9,14 @@ export function Footer() {
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* About */}
-          <div className="space-y-3">
-            <h3 className="font-semibold text-slate-900 dark:text-slate-50">
-              インベスタータイプ16
-            </h3>
+          <div className="space-y-4">
+            <Image
+              src="/image/logo.svg"
+              alt="インベスタータイプ16"
+              width={100}
+              height={32}
+              className="h-5 md:h-7 w-auto"
+            />
             <p className="text-sm text-slate-600 dark:text-slate-400">
               あなたの投資スタイルを4つの軸から診断。16種類のタイプから最適な投資戦略を見つけましょう。
             </p>

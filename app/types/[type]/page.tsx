@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { Metadata } from "next";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { INVESTOR_TYPES, InvestorCode } from "@/lib/investor-types";
@@ -18,6 +19,42 @@ export function generateStaticParams() {
   }));
 }
 
+export async function generateMetadata({ params }: TypeDetailPageProps): Promise<Metadata> {
+  const resolvedParams = await params;
+  const typeCode = resolvedParams.type.toUpperCase() as InvestorCode;
+  const typeData = INVESTOR_TYPES[typeCode];
+
+  if (!typeData) {
+    return {
+      title: "投資家タイプが見つかりません",
+    };
+  }
+
+  return {
+    title: `${typeData.name} (${typeData.code}) | 投資家タイプ一覧`,
+    description: `投資家タイプ「${typeData.name}」(${typeData.shortLabel})の詳細情報。${typeData.idealStrategy}`,
+    openGraph: {
+      type: "website",
+      title: "インベスタータイプ16 - あなたの投資スタイル診断",
+      description: "4つの軸から16タイプに分類。あなたに最適な投資戦略を見つけましょう。",
+      images: [
+        {
+          url: "/image/ogp.png",
+          width: 1200,
+          height: 630,
+          alt: "インベスタータイプ16",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "インベスタータイプ16 - あなたの投資スタイル診断",
+      description: "4つの軸から16タイプに分類。あなたに最適な投資戦略を見つけましょう。",
+      images: ["/image/ogp.png"],
+    },
+  };
+}
+
 export default async function TypeDetailPage({ params }: TypeDetailPageProps) {
   const resolvedParams = await params;
   const typeCode = resolvedParams.type.toUpperCase() as InvestorCode;
@@ -29,8 +66,46 @@ export default async function TypeDetailPage({ params }: TypeDetailPageProps) {
 
   const imageUrl = getTypeImageUrl(typeData.code);
 
-  // description を段落ごとに分割（** で始まる行を見出しとして扱う）
-  const descriptionLines = typeData.description.split("\n").filter((line) => line.trim());
+  // description を処理してセクション分けする
+  const parseDescription = (desc: string) => {
+    const lines = desc.split("\n").filter((line) => line.trim());
+    const sections: Array<{ type: 'heading' | 'paragraph' | 'list'; content: string | string[] }> = [];
+    let currentList: string[] = [];
+
+    lines.forEach((line) => {
+      // 【】で囲まれた見出し
+      if (line.match(/^【.+】$/)) {
+        // 前のリストを保存
+        if (currentList.length > 0) {
+          sections.push({ type: 'list', content: currentList });
+          currentList = [];
+        }
+        sections.push({ type: 'heading', content: line.replace(/【|】/g, '') });
+      }
+      // ・で始まる箇条書き
+      else if (line.startsWith('・')) {
+        currentList.push(line.substring(1).trim());
+      }
+      // 通常の段落
+      else {
+        // 前のリストを保存
+        if (currentList.length > 0) {
+          sections.push({ type: 'list', content: currentList });
+          currentList = [];
+        }
+        sections.push({ type: 'paragraph', content: line });
+      }
+    });
+
+    // 最後に残ったリストを保存
+    if (currentList.length > 0) {
+      sections.push({ type: 'list', content: currentList });
+    }
+
+    return sections;
+  };
+
+  const descriptionSections = parseDescription(typeData.description);
 
   return (
     <div className="bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 py-16">
@@ -79,25 +154,40 @@ export default async function TypeDetailPage({ params }: TypeDetailPageProps) {
         <Card className="mb-8">
           <CardContent className="pt-8 pb-8">
             <div className="prose prose-slate dark:prose-invert max-w-none">
-              {descriptionLines.map((line, index) => {
-                // **で囲まれた見出しを処理
-                if (line.startsWith("**") && line.endsWith("**")) {
-                  const heading = line.replace(/\*\*/g, "");
+              {descriptionSections.map((section, index) => {
+                if (section.type === 'heading') {
                   return (
                     <h3
                       key={index}
-                      className="text-xl font-bold text-slate-900 dark:text-slate-50 mt-6 mb-3 first:mt-0"
+                      className="text-xl font-bold text-slate-900 dark:text-slate-50 mt-8 mb-4 first:mt-0 border-b-1 border-slate-300 dark:border-slate-700 pb-2"
                     >
-                      {heading}
+                      {section.content as string}
                     </h3>
+                  );
+                }
+                if (section.type === 'list') {
+                  return (
+                    <ul
+                      key={index}
+                      className="space-y-2 mb-6 list-none pl-0"
+                    >
+                      {(section.content as string[]).map((item, i) => (
+                        <li
+                          key={i}
+                          className="text-slate-700 dark:text-slate-300 leading-relaxed pl-6 relative before:content-['•'] before:absolute before:left-0 before:text-slate-900 dark:before:text-slate-50 before:font-bold"
+                        >
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
                   );
                 }
                 return (
                   <p
                     key={index}
-                    className="text-slate-700 dark:text-slate-300 mb-4 leading-relaxed whitespace-pre-line"
+                    className="text-slate-700 dark:text-slate-300 mb-4 leading-relaxed"
                   >
-                    {line}
+                    {section.content as string}
                   </p>
                 );
               })}
@@ -116,8 +206,8 @@ export default async function TypeDetailPage({ params }: TypeDetailPageProps) {
               <div className="space-y-4">
                 {typeData.bestMatches && typeData.bestMatches.length > 0 && (
                   <div>
-                    <h4 className="text-sm font-semibold text-green-700 dark:text-green-400 mb-2">
-                      ベストマッチ
+                    <h4 className="text-sm font-semibold text-black dark:text-green-400 mb-2">
+                      💖 ベストマッチ
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {typeData.bestMatches.map((code) => (
@@ -134,8 +224,8 @@ export default async function TypeDetailPage({ params }: TypeDetailPageProps) {
 
                 {typeData.goodMatches && typeData.goodMatches.length > 0 && (
                   <div>
-                    <h4 className="text-sm font-semibold text-blue-700 dark:text-blue-400 mb-2">
-                      相性良好
+                    <h4 className="text-sm font-semibold text-black dark:text-blue-400 mb-2">
+                      👍 相性良好
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {typeData.goodMatches.map((code) => (
@@ -152,8 +242,8 @@ export default async function TypeDetailPage({ params }: TypeDetailPageProps) {
 
                 {typeData.challengeMatches && typeData.challengeMatches.length > 0 && (
                   <div>
-                    <h4 className="text-sm font-semibold text-orange-700 dark:text-orange-400 mb-2">
-                      チャレンジ相性
+                    <h4 className="text-sm font-semibold text-black dark:text-orange-400 mb-2">
+                      🌀 チャレンジ相性
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {typeData.challengeMatches.map((code) => (
@@ -168,6 +258,30 @@ export default async function TypeDetailPage({ params }: TypeDetailPageProps) {
                   </div>
                 )}
               </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* CTA Section */}
+        {typeData.ctaMessage && (
+          <Card className="mb-8 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 border-blue-200 dark:border-blue-800">
+            <CardContent className="pt-6 pb-6 text-center">
+              <h3 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-slate-50 mb-3">
+                米国株24時間取引なら、ウッドストック
+              </h3>
+              <p className="text-sm md:text-base text-slate-700 dark:text-slate-300 mb-4 max-w-2xl mx-auto px-4">
+                {typeData.ctaMessage}
+              </p>
+              <a
+                href="https://woodstock.go.link?adj_t=1g32x80c"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block w-full max-w-md px-4"
+              >
+                <Button size="lg" className="text-sm md:text-base px-4 md:px-6 py-4 md:py-5 w-full">
+                  woodstock.clubアプリをダウンロード
+                </Button>
+              </a>
             </CardContent>
           </Card>
         )}

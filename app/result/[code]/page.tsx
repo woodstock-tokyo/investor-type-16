@@ -1,8 +1,9 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { Metadata } from "next";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { ShareButtons } from "@/components/share-buttons";
 import { getInvestorType, INVESTOR_TYPES, type InvestorCode } from "@/lib/investor-types";
 import { getTypeImageUrl } from "@/lib/image-utils";
@@ -11,6 +12,41 @@ interface PageProps {
   params: Promise<{
     code: string;
   }>;
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { code } = await params;
+  const investorType = getInvestorType(code);
+
+  if (!investorType) {
+    return {
+      title: "投資家タイプが見つかりません",
+    };
+  }
+
+  return {
+    title: `${investorType.name} (${investorType.code}) | 投資家タイプ診断結果`,
+    description: `あなたの投資家タイプは「${investorType.name}」(${investorType.shortLabel})です。${investorType.idealStrategy}`,
+    openGraph: {
+      type: "website",
+      title: "インベスタータイプ16 - あなたの投資スタイル診断",
+      description: "4つの軸から16タイプに分類。あなたに最適な投資戦略を見つけましょう。",
+      images: [
+        {
+          url: "/image/ogp.png",
+          width: 1200,
+          height: 630,
+          alt: "インベスタータイプ16",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "インベスタータイプ16 - あなたの投資スタイル診断",
+      description: "4つの軸から16タイプに分類。あなたに最適な投資戦略を見つけましょう。",
+      images: ["/image/ogp.png"],
+    },
+  };
 }
 
 export default async function ResultPage({ params }: PageProps) {
@@ -23,8 +59,46 @@ export default async function ResultPage({ params }: PageProps) {
 
   const imageUrl = getTypeImageUrl(investorType.code);
 
-  // description を段落ごとに分割（** で始まる行を見出しとして扱う）
-  const descriptionLines = investorType.description.split("\n").filter((line) => line.trim());
+  // description を処理してセクション分けする
+  const parseDescription = (desc: string) => {
+    const lines = desc.split("\n").filter((line) => line.trim());
+    const sections: Array<{ type: 'heading' | 'paragraph' | 'list'; content: string | string[] }> = [];
+    let currentList: string[] = [];
+
+    lines.forEach((line) => {
+      // 【】で囲まれた見出し
+      if (line.match(/^【.+】$/)) {
+        // 前のリストを保存
+        if (currentList.length > 0) {
+          sections.push({ type: 'list', content: currentList });
+          currentList = [];
+        }
+        sections.push({ type: 'heading', content: line.replace(/【|】/g, '') });
+      }
+      // ・で始まる箇条書き
+      else if (line.startsWith('・')) {
+        currentList.push(line.substring(1).trim());
+      }
+      // 通常の段落
+      else {
+        // 前のリストを保存
+        if (currentList.length > 0) {
+          sections.push({ type: 'list', content: currentList });
+          currentList = [];
+        }
+        sections.push({ type: 'paragraph', content: line });
+      }
+    });
+
+    // 最後に残ったリストを保存
+    if (currentList.length > 0) {
+      sections.push({ type: 'list', content: currentList });
+    }
+
+    return sections;
+  };
+
+  const descriptionSections = parseDescription(investorType.description);
 
   return (
     <div className="min-h-screen bg-linear-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
@@ -74,25 +148,40 @@ export default async function ResultPage({ params }: PageProps) {
           <Card>
             <CardContent className="pt-8 pb-8">
               <div className="prose prose-slate dark:prose-invert max-w-none">
-                {descriptionLines.map((line, index) => {
-                  // **で囲まれた見出しを処理
-                  if (line.startsWith("**") && line.endsWith("**")) {
-                    const heading = line.replace(/\*\*/g, "");
+                {descriptionSections.map((section, index) => {
+                  if (section.type === 'heading') {
                     return (
                       <h3
                         key={index}
-                        className="text-xl font-bold text-slate-900 dark:text-slate-50 mt-6 mb-3 first:mt-0"
+                        className="text-xl font-bold text-slate-900 dark:text-slate-50 mt-8 mb-4 first:mt-0 border-b-2 border-slate-300 dark:border-slate-700 pb-2"
                       >
-                        {heading}
+                        {section.content as string}
                       </h3>
+                    );
+                  }
+                  if (section.type === 'list') {
+                    return (
+                      <ul
+                        key={index}
+                        className="space-y-2 mb-6 list-none pl-0"
+                      >
+                        {(section.content as string[]).map((item, i) => (
+                          <li
+                            key={i}
+                            className="text-slate-700 dark:text-slate-300 leading-relaxed pl-6 relative before:content-['•'] before:absolute before:left-0 before:text-slate-900 dark:before:text-slate-50 before:font-bold"
+                          >
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
                     );
                   }
                   return (
                     <p
                       key={index}
-                      className="text-slate-700 dark:text-slate-300 mb-4 leading-relaxed whitespace-pre-line"
+                      className="text-slate-700 dark:text-slate-300 mb-4 leading-relaxed"
                     >
-                      {line}
+                      {section.content as string}
                     </p>
                   );
                 })}
@@ -111,8 +200,8 @@ export default async function ResultPage({ params }: PageProps) {
                 <div className="space-y-4">
                   {investorType.bestMatches && investorType.bestMatches.length > 0 && (
                     <div>
-                      <h4 className="text-sm font-semibold text-green-700 dark:text-green-400 mb-2">
-                        ベストマッチ
+                      <h4 className="text-sm font-semibold text-black dark:text-green-400 mb-2">
+                        💖 ベストマッチ
                       </h4>
                       <div className="flex flex-wrap gap-2">
                         {investorType.bestMatches.map((code) => (
@@ -129,8 +218,8 @@ export default async function ResultPage({ params }: PageProps) {
 
                   {investorType.goodMatches && investorType.goodMatches.length > 0 && (
                     <div>
-                      <h4 className="text-sm font-semibold text-blue-700 dark:text-blue-400 mb-2">
-                        相性良好
+                      <h4 className="text-sm font-semibold text-black dark:text-blue-400 mb-2">
+                        👍 相性良好
                       </h4>
                       <div className="flex flex-wrap gap-2">
                         {investorType.goodMatches.map((code) => (
@@ -147,8 +236,8 @@ export default async function ResultPage({ params }: PageProps) {
 
                   {investorType.challengeMatches && investorType.challengeMatches.length > 0 && (
                     <div>
-                      <h4 className="text-sm font-semibold text-orange-700 dark:text-orange-400 mb-2">
-                        チャレンジ相性
+                      <h4 className="text-sm font-semibold text-black dark:text-orange-400 mb-2">
+                        🌀 チャレンジ相性
                       </h4>
                       <div className="flex flex-wrap gap-2">
                         {investorType.challengeMatches.map((code) => (
@@ -172,7 +261,7 @@ export default async function ResultPage({ params }: PageProps) {
             <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 border-blue-200 dark:border-blue-800">
               <CardContent className="pt-6 pb-6 text-center">
                 <h3 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-slate-50 mb-3">
-                  次のステップへ
+                  次のステップ
                 </h3>
                 <p className="text-sm md:text-base text-slate-700 dark:text-slate-300 mb-4 max-w-2xl mx-auto px-4">
                   {investorType.ctaMessage}

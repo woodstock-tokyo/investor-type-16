@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 
 export function Header() {
@@ -7,9 +8,14 @@ export function Header() {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo/Title */}
         <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
-          <span className="text-sm sm:text-base md:text-xl font-bold text-slate-900 dark:text-slate-50 whitespace-nowrap">
-            インベスタータイプ16
-          </span>
+          <Image
+            src="/image/logo.svg"
+            alt="インベスタータイプ16"
+            width={120}
+            height={32}
+            className="h-5 md:h-7 w-auto"
+            priority
+          />
         </Link>
 
         {/* Navigation */}

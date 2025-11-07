@@ -21,6 +21,20 @@ export const metadata: Metadata = {
     type: "website",
     title: "インベスタータイプ16 - あなたの投資スタイル診断",
     description: "4つの軸から16タイプに分類。あなたに最適な投資戦略を見つけましょう。",
+    images: [
+      {
+        url: "/image/ogp.png",
+        width: 1200,
+        height: 630,
+        alt: "インベスタータイプ16",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "インベスタータイプ16 - あなたの投資スタイル診断",
+    description: "4つの軸から16タイプに分類。あなたに最適な投資戦略を見つけましょう。",
+    images: ["/image/ogp.png"],
   },
 };
 
