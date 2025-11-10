@@ -5,7 +5,7 @@ import { Metadata } from "next";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ShareButtons } from "@/components/share-buttons";
-import { getInvestorType, INVESTOR_TYPES, type InvestorCode } from "@/lib/investor-types";
+import { getInvestorType, INVESTOR_TYPES, type InvestorCode, getCodeMeanings } from "@/lib/investor-types";
 import { getTypeImageUrl } from "@/lib/image-utils";
 
 interface PageProps {
@@ -143,6 +143,22 @@ export default async function ResultPage({ params }: PageProps) {
               )}
             </div>
           </div>
+
+          {/* Code Meanings */}
+          <Card>
+            <CardContent className="pt-6 pb-6">
+              <div className="flex flex-wrap gap-3 justify-center">
+                {getCodeMeanings(investorType.code).map((meaning: string, index: number) => (
+                  <div
+                    key={index}
+                    className="px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300"
+                  >
+                    {meaning}
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Description */}
           <Card>

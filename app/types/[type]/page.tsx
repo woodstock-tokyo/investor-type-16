@@ -4,7 +4,11 @@ import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { INVESTOR_TYPES, InvestorCode } from "@/lib/investor-types";
+import {
+  INVESTOR_TYPES,
+  InvestorCode,
+  getCodeMeanings
+} from "@/lib/investor-types";
 import { getTypeImageUrl } from "@/lib/image-utils";
 
 interface TypeDetailPageProps {
@@ -149,6 +153,22 @@ export default async function TypeDetailPage({ params }: TypeDetailPageProps) {
             )}
           </div>
         </div>
+
+        {/* Code Meanings */}
+        <Card className="mb-8">
+          <CardContent className="pt-6 pb-6">
+            <div className="flex flex-wrap gap-3 justify-center">
+              {getCodeMeanings(typeData.code).map((meaning: string, index: number) => (
+                <div
+                  key={index}
+                  className="px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300"
+                >
+                  {meaning}
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Description */}
         <Card className="mb-8">

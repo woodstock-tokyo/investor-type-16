@@ -763,3 +763,23 @@ export function getInvestorType(code: string): InvestorTypeMeta | null {
   const key = code.toUpperCase() as InvestorCode;
   return INVESTOR_TYPES[key] ?? null;
 }
+
+/**
+ * タイプコードの各文字の意味を取得する関数
+ * @param code - InvestorCode (例: "RALD")
+ * @returns 各文字の意味の配列 (例: ["R＝高リターン追求型", "A＝自分で判断", ...])
+ */
+export function getCodeMeanings(code: InvestorCode): string[] {
+  const charMap: Record<string, string> = {
+    'R': '高リターン追求型',
+    'S': '安定・堅実型',
+    'A': '自分で判断',
+    'C': 'みんなで判断',
+    'T': '短期・機動的',
+    'L': '長期・じっくり',
+    'D': '数字・データで判断',
+    'V': '共感・理念で判断'
+  };
+
+  return code.split('').map(char => `${char}＝${charMap[char] || ''}`).filter(Boolean);
+}
